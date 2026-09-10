@@ -4,6 +4,31 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
 
+  // স্টুডেন্ট পোর্টাল ও লগইন স্টেট
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [studentIdInput, setStudentIdInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+
+  // ডামি স্টুডেন্ট ডেটা
+  const studentData = {
+    name: 'আরিফ হোসেন',
+    roll: '১০১০৪৫',
+    class: 'একাদশ শ্রেণি',
+    group: 'বিজ্ঞান',
+    session: '২০২৪-২০২৫',
+    attendance: '৯২%',
+    gpa: '৫.০০ (প্রাক-নির্বাচনী)',
+    dueFees: '০.০০ ৳ (পরিশোধিত)',
+    results: [
+      { subject: 'বাংলা', mark: '৮৫', grade: 'A+' },
+      { subject: 'ইংরেজি', mark: '৮০', grade: 'A+' },
+      { subject: 'পদার্থবিজ্ঞান', mark: '৭৮', grade: 'A' },
+      { subject: 'রসায়ন', mark: '৮২', grade: 'A+' },
+      { subject: 'উচ্চতর গণিত', mark: '৮৮', grade: 'A+' },
+    ]
+  };
+
   // ডামি নোটিশ ডেটা
   const notices = [
     {
@@ -45,6 +70,17 @@ export default function App() {
     ? notices 
     : notices.filter(n => n.category === activeTab);
 
+  // লগইন হ্যান্ডলার
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (studentIdInput && passwordInput) {
+      setIsLoggedIn(true);
+      setIsLoginOpen(false);
+    } else {
+      alert('অনুগ্রহ করে স্টুডেন্ট আইডি ও পাসওয়ার্ড প্রবেশ করান');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
       {/* ১. টপ বার */}
@@ -54,8 +90,18 @@ export default function App() {
             <span>📞 হেল্পলাইন: +৮৮০ ১৭০০-০০০০০০</span>
             <span className="hidden md:inline">✉️ ইমেইল: info@college.edu.bd</span>
           </div>
-          <div className="bg-emerald-900 px-3 py-1 rounded-full text-emerald-200 text-xs">
-            📢 ২০২৪-২৫ শিক্ষাবর্ষের একাদশ শ্রেণির ভর্তি কার্যক্রম চলছে
+          <div className="flex items-center gap-3">
+            <span className="bg-emerald-900 px-3 py-1 rounded-full text-emerald-200 text-xs">
+              📢 ২০২৪-২৫ শিক্ষাবর্ষের একাদশ শ্রেণির ভর্তি কার্যক্রম চলছে
+            </span>
+            {isLoggedIn && (
+              <button 
+                onClick={() => setIsLoggedIn(false)}
+                className="bg-rose-600 hover:bg-rose-700 text-white text-xs px-2.5 py-1 rounded font-medium transition"
+              >
+                লগআউট
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -84,6 +130,21 @@ export default function App() {
               <a href="#" className="hover:text-emerald-600 transition">যোগাযোগ</a>
             </nav>
 
+            <div className="hidden md:flex items-center gap-3">
+              {isLoggedIn ? (
+                <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg text-emerald-800 text-sm font-semibold">
+                  👤 {studentData.name}
+                </div>
+              ) : (
+                <button 
+                  onClick={() => setIsLoginOpen(true)}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg text-sm transition shadow-sm"
+                >
+                  স্টুডেন্ট লগইন
+                </button>
+              )}
+            </div>
+
             <div className="md:hidden flex items-center">
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -107,193 +168,328 @@ export default function App() {
             <a href="#message" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">আমাদের কথা</a>
             <a href="#portals" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">পোর্টাল</a>
             <a href="#notice" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">নোটিশ বোর্ড</a>
-            <a href="#" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">যোগাযোগ</a>
+            {!isLoggedIn && (
+              <button 
+                onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }}
+                className="w-full text-left py-2 px-3 bg-emerald-600 text-white font-semibold rounded-md"
+              >
+                স্টুডেন্ট লগইন
+              </button>
+            )}
           </div>
         )}
       </header>
 
-      {/* ৩. হিরো ব্যানার */}
-      <section className="relative bg-gradient-to-r from-emerald-900 via-slate-900 to-emerald-950 text-white py-16 md:py-24 px-4 overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
-          <div className="md:w-1/2 space-y-6 text-center md:text-left">
-            <span className="inline-block bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium">
-              স্মার্ট বাংলাদেশ গড়ার প্রত্যয়ে
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">
-              স্মার্ট শিক্ষাঙ্গনে আপনাকে <span className="text-emerald-400">স্বাগতম</span>
-            </h2>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              একটি আধুনিক, প্রযুক্তিনির্ভর এবং মানসম্মত শিক্ষাপ্রতিষ্ঠান। আমাদের লক্ষ্য দক্ষ ও নীতিবান ভবিষ্যৎ প্রকাশি তৈরি করা।
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
-              <a href="#" className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-6 py-3 rounded-lg transition shadow-lg">
-                🎓 অনলাইন ভর্তি
-              </a>
-              <a href="#notice" className="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold px-6 py-3 rounded-lg transition backdrop-blur-sm">
-                📋 নোটিশ কেন্দ্র
-              </a>
-            </div>
-          </div>
-
-          <div className="md:w-1/2 w-full">
-            <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 shadow-2xl space-y-4">
-              <h3 className="text-xl font-bold text-emerald-300 border-b border-white/10 pb-3 flex items-center gap-2">
-                ⚡ জরুরি সেবা ও লিঙ্ক
-              </h3>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">📄 পরীক্ষা ও ফলাফল</a>
-                <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">💳 ফি পরিশোধ</a>
-                <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">📅 ক্লাস রুটিন</a>
-                <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">🏛️ বিভাগসমূহ</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ৪. স্ট্যাটিস্টিকস */}
-      <section className="bg-white py-12 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">১৯৬৫</div>
-            <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">প্রতিষ্ঠার বছর</div>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৩,৫০০+</div>
-            <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">বর্তমান শিক্ষার্থী</div>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৮৫+</div>
-            <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">অভিজ্ঞ শিক্ষক ও কর্মকর্তা</div>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৯৮%</div>
-            <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">পাসের হার</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ৫. অধ্যক্ষের বাণী (Principal's Message) */}
-      <section id="message" className="py-16 px-4 max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 flex flex-col md:flex-row items-center gap-8">
-          <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-2xl bg-emerald-100 flex items-center justify-center shrink-0 border-4 border-emerald-50 text-emerald-700 font-bold text-5xl shadow">
-            👨‍🏫
-          </div>
-          <div className="space-y-4 text-center md:text-left">
-            <span className="text-emerald-600 text-xs font-bold uppercase tracking-wider bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
-              স্বাগতম বার্তা
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">অধ্যক্ষের বাণী</h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              "আমাদের লক্ষ্য কেবল একাডেমিক ফলাফল নয়, বরং শিক্ষার্থীদের নৈতিকতা, শৃঙ্খলা ও আধুনিক প্রযুক্তিনির্ভর শিক্ষায় শিক্ষিত করে তোলা। ডিজিটাল বাংলাদেশ ও স্মার্ট সমাজ বিনির্মাণে আমাদের শিক্ষাপ্রতিষ্ঠান নিরলসভাবে কাজ করে যাচ্ছে।"
-            </p>
+      {/* যদি শিক্ষার্থী লগইন করা থাকে তবে ড্যাশবোর্ড দেখাবে */}
+      {isLoggedIn ? (
+        <div className="max-w-7xl mx-auto px-4 py-10 space-y-8">
+          <div className="bg-emerald-900 text-white p-6 sm:p-8 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h4 className="font-bold text-slate-900 text-base">অধ্যাপক ড. মোহাম্মদ আলী</h4>
-              <p className="text-xs text-slate-500">অধ্যক্ষ, সরকারি মডেল কলেজ</p>
+              <span className="bg-emerald-700 text-emerald-200 text-xs px-3 py-1 rounded-full font-medium">শিক্ষার্থী প্রোফাইল ড্যাশবোর্ড</span>
+              <h2 className="text-2xl sm:text-3xl font-bold mt-2">স্বাগতম, {studentData.name}!</h2>
+              <p className="text-emerald-200 text-sm mt-1">শ্রেণি: {studentData.class} | বিভাগ: {studentData.group} | রোল: {studentData.roll}</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ৬. শিক্ষক ও শিক্ষার্থী পোর্টাল কার্ড (Portals Section) */}
-      <section id="portals" className="py-12 px-4 max-w-7xl mx-auto bg-slate-100/60 rounded-3xl mb-16">
-        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">স্মার্ট পোর্টাল এক্সেস</h2>
-          <p className="text-slate-500 text-sm">শিক্ষার্থী ও শিক্ষকদের পৃথক ড্যাশবোর্ডে প্রবেশের সুবিধা</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* স্টুডেন্ট পোর্টাল */}
-          <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
-            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl font-bold">
-              👨‍🎓
-            </div>
-            <h3 className="text-xl font-bold text-slate-900">শিক্ষার্থী পোর্টাল</h3>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              উপস্থিতি, পরীক্ষার ফলাফল, অনলাইন ক্লাস রুটিন এবং ফি দেওয়ার হিস্ট্রি দেখতে লগইন করুন।
-            </p>
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition text-sm shadow-sm">
-              স্টুডেন্ট লগইন ➔
+            <button 
+              onClick={() => setIsLoggedIn(false)}
+              className="bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition shadow"
+            >
+              লগআউট করুন
             </button>
           </div>
 
-          {/* টিচার পোর্টাল */}
-          <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
-            <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold">
-              👨‍🏫
+          {/* স্ট্যাটস কার্ড */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+              <span className="text-xs text-slate-500 font-medium">উপস্থিতির হার</span>
+              <div className="text-3xl font-extrabold text-emerald-600">{studentData.attendance}</div>
+              <p className="text-xs text-slate-400">সর্বমোট কর্মদিবসের উপর ভিত্তি করে</p>
             </div>
-            <h3 className="text-xl font-bold text-slate-900">শিক্ষক পোর্টাল</h3>
-            <p className="text-slate-600 text-sm leading-relaxed">
-              দৈনন্দিন উপস্থিতি এন্ট্রি, নম্বর ইনপুট এবং ক্লাস নোটিশ প্রকাশের জন্য প্রবেশ করুন।
-            </p>
-            <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition text-sm shadow-sm">
-              শিক্ষক লগইন ➔
-            </button>
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+              <span className="text-xs text-slate-500 font-medium">সর্বশেষ জিপিএ</span>
+              <div className="text-3xl font-extrabold text-emerald-600">{studentData.gpa}</div>
+              <p className="text-xs text-slate-400">প্রাক-নির্বাচনী পরীক্ষা ২০২৬</p>
+            </div>
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+              <span className="text-xs text-slate-500 font-medium">বকেয়া ফি স্ট্যাটাস</span>
+              <div className="text-3xl font-extrabold text-emerald-600">{studentData.dueFees}</div>
+              <p className="text-xs text-slate-400">সকল ফি পরিশোধিত রয়েছে</p>
+            </div>
+          </div>
+
+          {/* পরীক্ষার ফলাফল টেবিল */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+            <h3 className="text-lg font-bold text-slate-900 border-l-4 border-emerald-600 pl-3">
+              সাম্প্রতিক পরীক্ষার নম্বরপত্র (Mark Sheet)
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm text-slate-600">
+                <thead className="bg-slate-50 text-slate-700 uppercase text-xs">
+                  <tr>
+                    <th className="py-3 px-4 rounded-l-lg">বিষয়</th>
+                    <th className="py-3 px-4">প্রাপ্ত নম্বর</th>
+                    <th className="py-3 px-4 rounded-r-lg">লেটার গ্রেড</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {studentData.results.map((res, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50/50">
+                      <td className="py-3 px-4 font-medium text-slate-800">{res.subject}</td>
+                      <td className="py-3 px-4">{res.mark}</td>
+                      <td className="py-3 px-4 font-semibold text-emerald-600">{res.grade}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* ৭. ডায়নামিক নোটিশ বোর্ড */}
-      <section id="notice" className="py-16 px-4 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 border-l-4 border-emerald-600 pl-3">
-              সাম্প্রতিক নোটিশসমূহ
-            </h2>
-            <p className="text-slate-500 text-sm mt-1">কলেজের যাবতীয় নোটিশ ও সার্কুলার একনজরে দেখুন</p>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {[
-              { id: 'all', label: 'সকল নোটিশ' },
-              { id: 'academic', label: 'একাডেমিক' },
-              { id: 'exam', label: 'পরীক্ষা' },
-              { id: 'general', label: 'সাধারণ' },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition ${
-                  activeTab === tab.id
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden divide-y divide-slate-100">
-          {filteredNotices.map((notice) => (
-            <div key={notice.id} className="p-4 sm:p-6 hover:bg-slate-50/80 transition flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  {notice.isUrgent && (
-                    <span className="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-200">
-                      জরুরি
-                    </span>
-                  )}
-                  <span className="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded">
-                    {notice.category === 'academic' ? 'একাডেমিক' : notice.category === 'exam' ? 'পরীক্ষা' : 'সাধারণ'}
-                  </span>
-                  <span className="text-xs text-slate-400">📅 {notice.date}</span>
+      ) : (
+        <>
+          {/* ৩. হিরো ব্যানার */}
+          <section className="relative bg-gradient-to-r from-emerald-900 via-slate-900 to-emerald-950 text-white py-16 md:py-24 px-4 overflow-hidden">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+              <div className="md:w-1/2 space-y-6 text-center md:text-left">
+                <span className="inline-block bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium">
+                  স্মার্ট বাংলাদেশ গড়ার প্রত্যয়ে
+                </span>
+                <h2 className="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">
+                  স্মার্ট শিক্ষাঙ্গনে আপনাকে <span className="text-emerald-400">স্বাগতম</span>
+                </h2>
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+                  একটি আধুনিক, প্রযুক্তিনির্ভর এবং মানসম্মত শিক্ষাপ্রতিষ্ঠান। আমাদের লক্ষ্য দক্ষ ও নীতিবান ভবিষ্যৎ প্রজন্ম তৈরি করা।
+                </p>
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
+                  <a href="#" className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-6 py-3 rounded-lg transition shadow-lg">
+                    🎓 অনলাইন ভর্তি
+                  </a>
+                  <a href="#notice" className="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold px-6 py-3 rounded-lg transition backdrop-blur-sm">
+                    📋 নোটিশ কেন্দ্র
+                  </a>
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-slate-800 hover:text-emerald-600 transition cursor-pointer">
-                  {notice.title}
-                </h3>
               </div>
 
-              <button className="flex items-center gap-1.5 bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-medium px-4 py-2 rounded-lg transition whitespace-nowrap border border-slate-200 hover:border-emerald-600">
-                📥 ডাউনলোড PDF
-              </button>
+              <div className="md:w-1/2 w-full">
+                <div className="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 shadow-2xl space-y-4">
+                  <h3 className="text-xl font-bold text-emerald-300 border-b border-white/10 pb-3 flex items-center gap-2">
+                    ⚡ জরুরি সেবা ও লিঙ্ক
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">📄 পরীক্ষা ও ফলাফল</a>
+                    <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">💳 ফি পরিশোধ</a>
+                    <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">📅 ক্লাস রুটিন</a>
+                    <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">🏛️ বিভাগসমূহ</a>
+                  </div>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      {/* ৮. ফুটার (Footer Section) */}
+          {/* ৪. স্ট্যাটিস্টিকস */}
+          <section className="bg-white py-12 border-b border-slate-200">
+            <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">১৯৬৫</div>
+                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">প্রতিষ্ঠার বছর</div>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৩,৫০০+</div>
+                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">বর্তমান শিক্ষার্থী</div>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৮৫+</div>
+                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">অভিজ্ঞ শিক্ষক ও কর্মকর্তা</div>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৯৮%</div>
+                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">পাসের হার</div>
+              </div>
+            </div>
+          </section>
+
+          {/* ৫. অধ্যক্ষের বাণী (Principal's Message) */}
+          <section id="message" className="py-16 px-4 max-w-7xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 flex flex-col md:flex-row items-center gap-8">
+              <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-2xl bg-emerald-100 flex items-center justify-center shrink-0 border-4 border-emerald-50 text-emerald-700 font-bold text-5xl shadow">
+                👨‍🏫
+              </div>
+              <div className="space-y-4 text-center md:text-left">
+                <span className="text-emerald-600 text-xs font-bold uppercase tracking-wider bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
+                  স্বাগতম বার্তা
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">অধ্যক্ষের বাণী</h2>
+                <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                  "আমাদের লক্ষ্য কেবল একাডেমিক ফলাফল নয়, বরং শিক্ষার্থীদের নৈতিকতা, শৃঙ্খলা ও আধুনিক প্রযুক্তিনির্ভর শিক্ষায় শিক্ষিত করে তোলা। ডিজিটাল বাংলাদেশ ও স্মার্ট সমাজ বিনির্মাণে আমাদের শিক্ষাপ্রতিষ্ঠান নিরলসভাবে কাজ করে যাচ্ছে।"
+                </p>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-base">অধ্যাপক ড. মোহাম্মদ আলী</h4>
+                  <p className="text-xs text-slate-500">অধ্যক্ষ, সরকারি মডেল কলেজ</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ৬. শিক্ষক ও শিক্ষার্থী পোর্টাল কার্ড */}
+          <section id="portals" className="py-12 px-4 max-w-7xl mx-auto bg-slate-100/60 rounded-3xl mb-16">
+            <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">স্মার্ট পোর্টাল এক্সেস</h2>
+              <p className="text-slate-500 text-sm">শিক্ষার্থী ও শিক্ষকদের পৃথক ড্যাশবোর্ডে প্রবেশের সুবিধা</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* স্টুডেন্ট পোর্টাল */}
+              <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
+                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl font-bold">
+                  👨‍🎓
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">শিক্ষার্থী পোর্টাল</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  উপস্থিতি, পরীক্ষার ফলাফল, অনলাইন ক্লাস রুটিন এবং ফি দেওয়ার হিস্ট্রি দেখতে লগইন করুন।
+                </p>
+                <button 
+                  onClick={() => setIsLoginOpen(true)}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition text-sm shadow-sm"
+                >
+                  স্টুডেন্ট লগইন ➔
+                </button>
+              </div>
+
+              {/* টিচার পোর্টাল */}
+              <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
+                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold">
+                  👨‍🏫
+                </div>
+                <h3 className="text-xl font-bold text-slate-900">শিক্ষক পোর্টাল</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  দৈনন্দিন উপস্থিতি এন্ট্রি, নম্বর ইনপুট এবং ক্লাস নোটিশ প্রকাশের জন্য প্রবেশ করুন।
+                </p>
+                <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition text-sm shadow-sm">
+                  শিক্ষক লগইন ➔
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* ৭. ডায়নামিক নোটিশ বোর্ড */}
+          <section id="notice" className="py-16 px-4 max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 border-l-4 border-emerald-600 pl-3">
+                  সাম্প্রতিক নোটিশসমূহ
+                </h2>
+                <p className="text-slate-500 text-sm mt-1">কলেজের যাবতীয় নোটিশ ও সার্কুলার একনজরে দেখুন</p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { id: 'all', label: 'সকল নোটিশ' },
+                  { id: 'academic', label: 'একাডেমিক' },
+                  { id: 'exam', label: 'পরীক্ষা' },
+                  { id: 'general', label: 'সাধারণ' },
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition ${
+                      activeTab === tab.id
+                        ? 'bg-emerald-600 text-white shadow'
+                        : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden divide-y divide-slate-100">
+              {filteredNotices.map((notice) => (
+                <div key={notice.id} className="p-4 sm:p-6 hover:bg-slate-50/80 transition flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      {notice.isUrgent && (
+                        <span className="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-200">
+                          জরুরি
+                        </span>
+                      )}
+                      <span className="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded">
+                        {notice.category === 'academic' ? 'একাডেমিক' : notice.category === 'exam' ? 'পরীক্ষা' : 'সাধারণ'}
+                      </span>
+                      <span className="text-xs text-slate-400">📅 {notice.date}</span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-semibold text-slate-800 hover:text-emerald-600 transition cursor-pointer">
+                      {notice.title}
+                    </h3>
+                  </div>
+
+                  <button className="flex items-center gap-1.5 bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-medium px-4 py-2 rounded-lg transition whitespace-nowrap border border-slate-200 hover:border-emerald-600">
+                    📥 ডাউনলোড PDF
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* ৮. লগইন মোডাল (Login Modal) */}
+      {isLoginOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 relative border border-slate-100">
+            <button 
+              onClick={() => setIsLoginOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold p-1"
+            >
+              ✕
+            </button>
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl mx-auto font-bold">
+                🎓
+              </div>
+              <h3 className="text-xl font-bold text-slate-900">স্টুডেন্ট পোর্টাল লগইন</h3>
+              <p className="text-xs text-slate-500">আপনার তথ্য দেখতে রোল নম্বর ও পাসওয়ার্ড দিন</p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">স্টুডেন্ট রোল / আইডি</label>
+                <input 
+                  type="text" 
+                  placeholder="যেমন: ১০১০৪৫" 
+                  value={studentIdInput}
+                  onChange={(e) => setStudentIdInput(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-emerald-600 text-sm"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">পাসওয়ার্ড</label>
+                <input 
+                  type="password" 
+                  placeholder="••••••••" 
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-emerald-600 text-sm"
+                  required
+                />
+              </div>
+
+              <div className="text-xs text-emerald-600 text-right cursor-pointer hover:underline">
+                পাসওয়ার্ড ভুলে গেছেন?
+              </div>
+
+              <button 
+                type="submit"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-sm shadow-md"
+              >
+                প্রবেশ করুন
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ৯. ফুটার */}
       <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
           <div className="space-y-3">
