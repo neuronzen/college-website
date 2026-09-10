@@ -78,9 +78,8 @@ export default function App() {
 
             <nav className="hidden md:flex items-center gap-6 font-medium text-slate-700">
               <a href="#" className="text-emerald-600 font-semibold hover:text-emerald-700 transition">হোম</a>
-              <a href="#" className="hover:text-emerald-600 transition">আমাদের কথা</a>
-              <a href="#" className="hover:text-emerald-600 transition">একাডেমিক</a>
-              <a href="#" className="hover:text-emerald-600 transition">অনলাইন ভর্তি</a>
+              <a href="#message" className="hover:text-emerald-600 transition">আমাদের কথা</a>
+              <a href="#portals" className="hover:text-emerald-600 transition">পোর্টাল</a>
               <a href="#notice" className="hover:text-emerald-600 transition">নোটিশ বোর্ড</a>
               <a href="#" className="hover:text-emerald-600 transition">যোগাযোগ</a>
             </nav>
@@ -105,9 +104,8 @@ export default function App() {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-slate-100 px-4 pt-2 pb-4 space-y-2 shadow-lg">
             <a href="#" className="block py-2 px-3 text-emerald-600 font-semibold bg-emerald-50 rounded-md">হোম</a>
-            <a href="#" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">আমাদের কথা</a>
-            <a href="#" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">একাডেমিক</a>
-            <a href="#" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">অনলাইন ভর্তি</a>
+            <a href="#message" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">আমাদের কথা</a>
+            <a href="#portals" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">পোর্টাল</a>
             <a href="#notice" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">নোটিশ বোর্ড</a>
             <a href="#" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">যোগাযোগ</a>
           </div>
@@ -175,7 +173,67 @@ export default function App() {
         </div>
       </section>
 
-      {/* ৫. ডায়নামিক নোটিশ বোর্ড সেকশন (Notice Board Section) */}
+      {/* ৫. অধ্যক্ষের বাণী (Principal's Message) */}
+      <section id="message" className="py-16 px-4 max-w-7xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 flex flex-col md:flex-row items-center gap-8">
+          <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-2xl bg-emerald-100 flex items-center justify-center shrink-0 border-4 border-emerald-50 text-emerald-700 font-bold text-5xl shadow">
+            👨‍🏫
+          </div>
+          <div className="space-y-4 text-center md:text-left">
+            <span className="text-emerald-600 text-xs font-bold uppercase tracking-wider bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
+              স্বাগতম বার্তা
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">অধ্যক্ষের বাণী</h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              "আমাদের লক্ষ্য কেবল একাডেমিক ফলাফল নয়, বরং শিক্ষার্থীদের নৈতিকতা, শৃঙ্খলা ও আধুনিক প্রযুক্তিনির্ভর শিক্ষায় শিক্ষিত করে তোলা। ডিজিটাল বাংলাদেশ ও স্মার্ট সমাজ বিনির্মাণে আমাদের শিক্ষাপ্রতিষ্ঠান নিরলসভাবে কাজ করে যাচ্ছে।"
+            </p>
+            <div>
+              <h4 className="font-bold text-slate-900 text-base">অধ্যাপক ড. মোহাম্মদ আলী</h4>
+              <p className="text-xs text-slate-500">অধ্যক্ষ, সরকারি মডেল কলেজ</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ৬. শিক্ষক ও শিক্ষার্থী পোর্টাল কার্ড (Portals Section) */}
+      <section id="portals" className="py-12 px-4 max-w-7xl mx-auto bg-slate-100/60 rounded-3xl mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">স্মার্ট পোর্টাল এক্সেস</h2>
+          <p className="text-slate-500 text-sm">শিক্ষার্থী ও শিক্ষকদের পৃথক ড্যাশবোর্ডে প্রবেশের সুবিধা</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* স্টুডেন্ট পোর্টাল */}
+          <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
+            <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl font-bold">
+              👨‍🎓
+            </div>
+            <h3 className="text-xl font-bold text-slate-900">শিক্ষার্থী পোর্টাল</h3>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              উপস্থিতি, পরীক্ষার ফলাফল, অনলাইন ক্লাস রুটিন এবং ফি দেওয়ার হিস্ট্রি দেখতে লগইন করুন।
+            </p>
+            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition text-sm shadow-sm">
+              স্টুডেন্ট লগইন ➔
+            </button>
+          </div>
+
+          {/* টিচার পোর্টাল */}
+          <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
+            <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold">
+              👨‍🏫
+            </div>
+            <h3 className="text-xl font-bold text-slate-900">শিক্ষক পোর্টাল</h3>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              দৈনন্দিন উপস্থিতি এন্ট্রি, নম্বর ইনপুট এবং ক্লাস নোটিশ প্রকাশের জন্য প্রবেশ করুন।
+            </p>
+            <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition text-sm shadow-sm">
+              শিক্ষক লগইন ➔
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ৭. ডায়নামিক নোটিশ বোর্ড */}
       <section id="notice" className="py-16 px-4 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>
@@ -185,7 +243,6 @@ export default function App() {
             <p className="text-slate-500 text-sm mt-1">কলেজের যাবতীয় নোটিশ ও সার্কুলার একনজরে দেখুন</p>
           </div>
 
-          {/* ক্যাটাগরি ফিল্টার বাটনসমূহ */}
           <div className="flex flex-wrap gap-2">
             {[
               { id: 'all', label: 'সকল নোটিশ' },
@@ -208,7 +265,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* নোটিশ তালিকা */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden divide-y divide-slate-100">
           {filteredNotices.map((notice) => (
             <div key={notice.id} className="p-4 sm:p-6 hover:bg-slate-50/80 transition flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -236,6 +292,35 @@ export default function App() {
           ))}
         </div>
       </section>
+
+      {/* ৮. ফুটার (Footer Section) */}
+      <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+          <div className="space-y-3">
+            <h3 className="text-white text-lg font-bold">সরকারি মডেল কলেজ</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              একটি আধুনিক ও স্মার্ট শিক্ষাপ্রতিষ্ঠান। গুণগত শিক্ষা নিশ্চিত করাই আমাদের মূল অঙ্গীকার।
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h4 className="text-white font-semibold mb-3">গুরুত্বপূর্ণ লিঙ্ক</h4>
+            <ul className="space-y-1.5 text-xs">
+              <li><a href="#" className="hover:text-emerald-400 transition">শিক্ষা মন্ত্রণালয়</a></li>
+              <li><a href="#" className="hover:text-emerald-400 transition">মাধ্যমিক ও উচ্চশিক্ষা অধিদপ্তর</a></li>
+              <li><a href="#" className="hover:text-emerald-400 transition">শিক্ষা বোর্ড</a></li>
+            </ul>
+          </div>
+          <div className="space-y-2 text-xs">
+            <h4 className="text-white font-semibold mb-3">যোগাযোগ</h4>
+            <p>📍 কলেজ রোড, ঢাকা, বাংলাদেশ</p>
+            <p>📞 +৮৮০ ১৭০০-০০০০০০</p>
+            <p>✉️ info@college.edu.bd</p>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
+          © ২০২৬ সরকারি মডেল কলেজ। সর্বস্বত্ব সংরক্ষিত।
+        </div>
+      </footer>
     </div>
   );
 }
