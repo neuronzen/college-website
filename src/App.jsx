@@ -3,12 +3,85 @@ import React, { useState } from 'react';
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
+  const [searchTeacher, setSearchTeacher] = useState('');
+  const [selectedDesignation, setSelectedDesignation] = useState('all');
 
   // স্টুডেন্ট পোর্টাল ও লগইন স্টেট
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [studentIdInput, setStudentIdInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
+
+  // স্প্রেডশিট থেকে সংগৃহীত শিক্ষক তালিকা
+  const teachers = [
+    { id: 1, name: "মোহাম্মদ আবদুর রশিদ", designation: "অধ্যক্ষ (ভারপ্রাপ্ত)", email: "ma.rashidalhera@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rashid" },
+    { id: 2, name: "মোঃ আবুল হাসনাত নাইস", designation: "উপাধ্যক্ষ", email: "mdlaish@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Hasnat" },
+    { id: 3, name: "দৌলতেন নাহার", designation: "অধ্যাপক", email: "daulatennahar@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Daulaten" },
+    { id: 4, name: "মাহমুদা সুলতানা", designation: "অধ্যাপক", email: "smohmuda68@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mahmuda" },
+    { id: 5, name: "আবদুল গনি", designation: "অধ্যাপক", email: "01685770988j@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Gani" },
+    { id: 6, name: "মোঃ মোখলেছুর রহমান", designation: "অধ্যাপক", email: "mokhlesgazipur@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mokhles" },
+    { id: 7, name: "মোঃ ফখরুল আলম", designation: "অধ্যাপক", email: "fakhrul1522@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Fakhrul" },
+    { id: 8, name: "উম্মে সালমা আক্তার", designation: "সহকারী অধ্যাপক", email: "pelectronnew@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Salma" },
+    { id: 9, name: "মোঃ ফজলেহ মনির চৌধুরী", designation: "সহযোগী অধ্যাপক", email: "fazlehmonirc@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Fazleh" },
+    { id: 10, name: "মোঃ আফজাল হোসেন", designation: "সহযোগী অধ্যাপক", email: "afzalh1@yahoo.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Afzal" },
+    { id: 11, name: "মোঃ হুমায়ুন কবির খান", designation: "সহযোগী অধ্যাপক", email: "pphkabir@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Humayun" },
+    { id: 12, name: "জিয়া উদ্দিন আহম্মদ", designation: "সহকারী অধ্যাপক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zia" },
+    { id: 13, name: "সৈয়দ কাওছার আলী", designation: "সহকারী অধ্যাপক", email: "skaosar1969@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kaosar" },
+    { id: 14, name: "ফারহানা আফরোজ খান", designation: "সহকারী অধ্যাপক", email: "fathanazaima77@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Farhana" },
+    { id: 15, name: "জেসমিন সুলতানা ডেইজী", designation: "সহকারী অধ্যাপক", email: "daizymasharafa@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jasmin" },
+    { id: 16, name: "নাছিমা আক্তার", designation: "সহযোগী অধ্যাপক", email: "nasimaakter011980@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Nasima" },
+    { id: 17, name: "সাবিনা হক", designation: "সহযোগী অধ্যাপক", email: "haquesabina87@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sabina" },
+    { id: 18, name: "মাকসুদা আলপনা", designation: "সহযোগী অধ্যাপক", email: "maksudaalpona0@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maksuda" },
+    { id: 19, name: "ইশমাত ঈশা", designation: "সহযোগী অধ্যাপক", email: "ishmat0382@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ishmat" },
+    { id: 20, name: "আবুল হোসেন চৌধুরী", designation: "সহযোগী অধ্যাপক", email: "abchowdhury20@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=AbulChowdhury" },
+    { id: 21, name: "জোবায়দা নাহার", designation: "সহযোগী অধ্যাপক", email: "zobaidasumi71@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zobaida" },
+    { id: 22, name: "মোহাম্মদ রফিকুল ইসলাম", designation: "সহযোগী অধ্যাপক", email: "saditenterprise34@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rafiqul" },
+    { id: 23, name: "রায়হান আহমেদ", designation: "সহযোগী অধ্যাপক", email: "rayhanahamed1980@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rayhan" },
+    { id: 24, name: "আসমা আক্তার", designation: "সহকারী অধ্যাপক", email: "asma2018bd@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Asma" },
+    { id: 25, name: "ইকবাল হোসেন", designation: "সহকারী অধ্যাপক", email: "iqbalerapc@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Iqbal" },
+    { id: 26, name: "মাহমুদা জেসমিন মুহিতা", designation: "সহকারী অধ্যাপক", email: "mahamodajasmen@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Muhita" },
+    { id: 27, name: "মোক্তার হোসেন", designation: "সহকারী অধ্যাপক", email: "mukterhossain530@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mukter" },
+    { id: 28, name: "হাদিউল ইসলাম", designation: "সহকারী অধ্যাপক", email: "hadioulislam02@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Hadiul" },
+    { id: 29, name: "শামিমা নাসরিন", designation: "সহকারী অধ্যাপক", email: "shamimaruma31@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shamima" },
+    { id: 30, name: "মোঃ আনোয়ারুল আজীম", designation: "সহযোগী অধ্যাপক", email: "azim338@yahoo.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Anwarul" },
+    { id: 31, name: "সুকোমল চন্দ্র সেন", designation: "সহকারী অধ্যাপক", email: "sukumalsen0@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sukumal" },
+    { id: 32, name: "নিকুঞ্জ চন্দ্র সরকার", designation: "সহকারী অধ্যাপক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Nikunja" },
+    { id: 33, name: "লুৎফর রহমান", designation: "প্রভাষক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lutfor" },
+    { id: 34, name: "ফারজানা ফেরদোস", designation: "প্রভাষক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Farjana" },
+    { id: 35, name: "শ্যামল চন্দ্র দাস", designation: "প্রভাষক", email: "agnimohondas@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shyamal" },
+    { id: 36, name: "মোঃ রাশেদ সাজু", designation: "সহকারী অধ্যাপক", email: "rashad_sazu@yahoo.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rashed" },
+    { id: 37, name: "তানজিমা সুলতানা", designation: "সহকারী অধ্যাপক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tanjima" },
+    { id: 38, name: "তানিয়া বেগম", designation: "প্রভাষক", email: "taniapac384@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tania" },
+    { id: 39, name: "রোকসানা আক্তার", designation: "প্রভাষক", email: "roksanaakter994@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Roksana" },
+    { id: 40, name: "শ্রী সুকুমার চন্দ্র নন্দী", designation: "প্রভাষক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sukumar" },
+    { id: 41, name: "মোঃ মোবারক হোসেন", designation: "শরীরচর্চা শিক্ষক", email: "mdmobarakhossain247@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mobarak" },
+    { id: 42, name: "মোঃ ফাইজুল ইসলাম", designation: "প্রদর্শক", email: "mdfaijulislam@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Faijul" },
+    { id: 43, name: "মোঃ দুলাল উদ্দিন ভূঁইয়া", designation: "প্রদর্শক", email: "dulaluddinbhuiyan209@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Dulal" },
+    { id: 44, name: "মোঃ মাসুদুর রহমান সিদ্দিকী", designation: "প্রদর্শক", email: "rmasudur.657@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Masudur" },
+    { id: 45, name: "মোঃ রুহুল আমিন", designation: "প্রদর্শক", email: "ruhulmdamin50@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ruhul" },
+    { id: 46, name: "রোকসানা আক্তার", designation: "সহকারী শিক্ষক (গ্রন্থাগার)", email: "roxana.akterpc@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=RoxanaLibrarian" },
+    { id: 47, name: "রিজওয়ানা রহমান", designation: "সহকারী অধ্যাপক", email: "rezuananipu19@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rejuana" },
+    { id: 48, name: "মোঃ হুমায়ুন কবির", designation: "সহকারী অধ্যাপক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=HumayunKavir" },
+    { id: 49, name: "হাছনা হেনা মুক্তা", designation: "সহকারী অধ্যাপক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=HasnaHena" },
+    { id: 50, name: "ফরিদা আক্তার", designation: "সহকারী অধ্যাপক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Farida" },
+    { id: 51, name: "মোঃ শাহাদাৎ হোসেন", designation: "সহকারী অধ্যাপক", email: "shahadatsuman786@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Shahadat" },
+    { id: 52, name: "সেলিম", designation: "প্রভাষক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Selim" },
+    { id: 53, name: "মোঃ মেহেদী হাসান", designation: "প্রভাষক", email: "mehedihassan7777@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mehedi" },
+    { id: 54, name: "মোঃ আবুল হাসনাত", designation: "প্রভাষক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=AbulHasnat" },
+    { id: 55, name: "সুলতানা রাজিয়া", designation: "প্রভাষক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=SultanaRajia" },
+    { id: 56, name: "মোঃ মিজানুর রহমান", designation: "প্রভাষক", email: "mijanurrahman19822021@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mijanur" },
+    { id: 57, name: "এইচ এম আবু হোসেন", designation: "প্রভাষক", email: "hm.abuhossain@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=AbuHossain" },
+    { id: 58, name: "রহিমা খাতুন", designation: "প্রভাষক", email: "laboniakter3748@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahima" },
+    { id: 59, name: "জান্নাতুল ফেরদৌস", designation: "প্রভাষক", email: "", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jannatul" },
+    { id: 60, name: "মোঃ আব্দুর রাজ্জাক", designation: "প্রভাষক", email: "abdurrazzakbsmrstu@gmail.com", image: "https://api.dicebear.com/7.x/avataaars/svg?seed=AbdurRazzak" }
+  ];
+
+  // ফিল্টার করা শিক্ষক
+  const filteredTeachers = teachers.filter(t => {
+    const matchesSearch = t.name.toLowerCase().includes(searchTeacher.toLowerCase()) || t.email.toLowerCase().includes(searchTeacher.toLowerCase());
+    const matchesDesig = selectedDesignation === 'all' || t.designation.includes(selectedDesignation);
+    return matchesSearch && matchesDesig;
+  });
 
   // ডামি স্টুডেন্ট ডেটা
   const studentData = {
@@ -112,11 +185,11 @@ export default function App() {
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow">
-                ক
+                পূ
               </div>
               <div>
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">
-                  সরকারি মডেল কলেজ
+                  পূবাইল আদর্শ কলেজ
                 </h1>
                 <p className="text-xs text-slate-500">শিক্ষা, শৃঙ্খলা, তথ্যপ্রযুক্তি</p>
               </div>
@@ -124,10 +197,10 @@ export default function App() {
 
             <nav className="hidden md:flex items-center gap-6 font-medium text-slate-700">
               <a href="#" className="text-emerald-600 font-semibold hover:text-emerald-700 transition">হোম</a>
-              <a href="#message" className="hover:text-emerald-600 transition">আমাদের কথা</a>
+              <a href="#teachers" className="hover:text-emerald-600 transition">শিক্ষকমণ্ডলী</a>
               <a href="#portals" className="hover:text-emerald-600 transition">পোর্টাল</a>
               <a href="#notice" className="hover:text-emerald-600 transition">নোটিশ বোর্ড</a>
-              <a href="#" className="hover:text-emerald-600 transition">যোগাযোগ</a>
+              <a href="#message" className="hover:text-emerald-600 transition">আমাদের কথা</a>
             </nav>
 
             <div className="hidden md:flex items-center gap-3">
@@ -165,9 +238,10 @@ export default function App() {
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t border-slate-100 px-4 pt-2 pb-4 space-y-2 shadow-lg">
             <a href="#" className="block py-2 px-3 text-emerald-600 font-semibold bg-emerald-50 rounded-md">হোম</a>
-            <a href="#message" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">আমাদের কথা</a>
+            <a href="#teachers" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">শিক্ষকমণ্ডলী</a>
             <a href="#portals" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">পোর্টাল</a>
             <a href="#notice" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">নোটিশ বোর্ড</a>
+            <a href="#message" className="block py-2 px-3 text-slate-700 hover:bg-slate-50 rounded-md">আমাদের কথা</a>
             {!isLoggedIn && (
               <button 
                 onClick={() => { setIsLoginOpen(true); setIsMenuOpen(false); }}
@@ -197,7 +271,6 @@ export default function App() {
             </button>
           </div>
 
-          {/* স্ট্যাটস কার্ড */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-1">
               <span className="text-xs text-slate-500 font-medium">উপস্থিতির হার</span>
@@ -216,7 +289,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* পরীক্ষার ফলাফল টেবিল */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
             <h3 className="text-lg font-bold text-slate-900 border-l-4 border-emerald-600 pl-3">
               সাম্প্রতিক পরীক্ষার নম্বরপত্র (Mark Sheet)
@@ -253,7 +325,7 @@ export default function App() {
                   স্মার্ট বাংলাদেশ গড়ার প্রত্যয়ে
                 </span>
                 <h2 className="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">
-                  স্মার্ট শিক্ষাঙ্গনে আপনাকে <span className="text-emerald-400">স্বাগতম</span>
+                  পূবাইল আদর্শ কলেজে আপনাকে <span className="text-emerald-400">স্বাগতম</span>
                 </h2>
                 <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
                   একটি আধুনিক, প্রযুক্তিনির্ভর এবং মানসম্মত শিক্ষাপ্রতিষ্ঠান। আমাদের লক্ষ্য দক্ষ ও নীতিবান ভবিষ্যৎ প্রজন্ম তৈরি করা।
@@ -276,7 +348,7 @@ export default function App() {
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">📄 পরীক্ষা ও ফলাফল</a>
                     <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">💳 ফি পরিশোধ</a>
-                    <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">📅 ক্লাস রুটিন</a>
+                    <a href="#teachers" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">👨‍🏫 শিক্ষকমণ্ডলী</a>
                     <a href="#" className="p-3 bg-white/5 hover:bg-white/15 rounded-xl border border-white/5 transition flex items-center gap-2">🏛️ বিভাগসমূহ</a>
                   </div>
                 </div>
@@ -284,30 +356,67 @@ export default function App() {
             </div>
           </section>
 
-          {/* ৪. স্ট্যাটিস্টিকস */}
-          <section className="bg-white py-12 border-b border-slate-200">
-            <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">১৯৬৫</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">প্রতিষ্ঠার বছর</div>
+          {/* ৪. শিক্ষকমণ্ডলী তালিকা সেকশন (Teachers Directory) */}
+          <section id="teachers" className="py-16 px-4 max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 border-l-4 border-emerald-600 pl-3">
+                  শিক্ষকমণ্ডলী ও কর্মকর্তা
+                </h2>
+                <p className="text-slate-500 text-sm mt-1">পূবাইল আদর্শ কলেজের সন্মানিত শিক্ষক ও কর্মকর্তাবৃন্দ (মোট {teachers.length} জন)</p>
               </div>
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৩,৫০০+</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">বর্তমান শিক্ষার্থী</div>
+
+              {/* ফিল্টার ও সার্চ অপশন */}
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <input 
+                  type="text" 
+                  placeholder="শিক্ষকের নাম বা ইমেইল সার্চ করুন..." 
+                  value={searchTeacher}
+                  onChange={(e) => setSearchTeacher(e.target.value)}
+                  className="px-4 py-2 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:border-emerald-600 w-full sm:w-64"
+                />
+                <select 
+                  value={selectedDesignation}
+                  onChange={(e) => setSelectedDesignation(e.target.value)}
+                  className="px-4 py-2 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:border-emerald-600"
+                >
+                  <option value="all">সকল পদবী</option>
+                  <option value="অধ্যক্ষ">অধ্যক্ষ / উপাধ্যক্ষ</option>
+                  <option value="অধ্যাপক">অধ্যাপক</option>
+                  <option value="সহযোগী অধ্যাপক">সহযোগী অধ্যাপক</option>
+                  <option value="সহকারী অধ্যাপক">সহকারী অধ্যাপক</option>
+                  <option value="প্রভাষক">প্রভাষক</option>
+                </select>
               </div>
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৮৫+</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">অভিজ্ঞ শিক্ষক ও কর্মকর্তা</div>
-              </div>
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600">৯৮%</div>
-                <div className="text-xs sm:text-sm text-slate-500 font-medium mt-1">পাসের হার</div>
-              </div>
+            </div>
+
+            {/* টিচারদের গ্রিড কার্ড */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredTeachers.map((teacher) => (
+                <div key={teacher.id} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition text-center space-y-3 flex flex-col items-center">
+                  <div className="w-20 h-20 bg-slate-100 rounded-full overflow-hidden border-2 border-emerald-500 p-1">
+                    <img src={teacher.image} alt={teacher.name} className="w-full h-full object-cover rounded-full" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-base">{teacher.name}</h3>
+                    <span className="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full mt-1 inline-block">
+                      {teacher.designation}
+                    </span>
+                  </div>
+                  {teacher.email ? (
+                    <p className="text-xs text-slate-500 truncate w-full" title={teacher.email}>
+                      ✉️ {teacher.email}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-slate-400 italic">ইমেইল উপলব্ধ নয়</p>
+                  )}
+                </div>
+              ))}
             </div>
           </section>
 
-          {/* ৫. অধ্যক্ষের বাণী (Principal's Message) */}
-          <section id="message" className="py-16 px-4 max-w-7xl mx-auto">
+          {/* ৫. অধ্যক্ষের বাণী */}
+          <section id="message" className="py-16 px-4 max-w-7xl mx-auto border-t border-slate-200">
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-10 flex flex-col md:flex-row items-center gap-8">
               <div className="w-44 h-44 sm:w-52 sm:h-52 rounded-2xl bg-emerald-100 flex items-center justify-center shrink-0 border-4 border-emerald-50 text-emerald-700 font-bold text-5xl shadow">
                 👨‍🏫
@@ -318,11 +427,11 @@ export default function App() {
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">অধ্যক্ষের বাণী</h2>
                 <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                  "আমাদের লক্ষ্য কেবল একাডেমিক ফলাফল নয়, বরং শিক্ষার্থীদের নৈতিকতা, শৃঙ্খলা ও আধুনিক প্রযুক্তিনির্ভর শিক্ষায় শিক্ষিত করে তোলা। ডিজিটাল বাংলাদেশ ও স্মার্ট সমাজ বিনির্মাণে আমাদের শিক্ষাপ্রতিষ্ঠান নিরলসভাবে কাজ করে যাচ্ছে।"
+                  "আমাদের লক্ষ্য কেবল একাডেমিক ফলাফল নয়, বরং শিক্ষার্থীদের নৈতিকতা, শৃঙ্খলা ও আধুনিক প্রযুক্তিনির্ভর শিক্ষায় শিক্ষিত করে তোলা। ডিজিটাল বাংলাদেশ ও স্মার্ট সমাজ বিনির্মাণে পূবাইল আদর্শ কলেজ নিরলসভাবে কাজ করে যাচ্ছে।"
                 </p>
                 <div>
-                  <h4 className="font-bold text-slate-900 text-base">অধ্যাপক ড. মোহাম্মদ আলী</h4>
-                  <p className="text-xs text-slate-500">অধ্যক্ষ, সরকারি মডেল কলেজ</p>
+                  <h4 className="font-bold text-slate-900 text-base">মোহাম্মদ আবদুর রশিদ</h4>
+                  <p className="text-xs text-slate-500">অধ্যক্ষ (ভারপ্রাপ্ত), পূবাইল আদর্শ কলেজ</p>
                 </div>
               </div>
             </div>
@@ -336,7 +445,6 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* স্টুডেন্ট পোর্টাল */}
               <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
                 <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl font-bold">
                   👨‍🎓
@@ -353,7 +461,6 @@ export default function App() {
                 </button>
               </div>
 
-              {/* টিচার পোর্টাল */}
               <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
                 <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl font-bold">
                   👨‍🏫
@@ -431,7 +538,7 @@ export default function App() {
         </>
       )}
 
-      {/* ৮. লগইন মোডাল (Login Modal) */}
+      {/* ৮. লগইন মোডাল */}
       {isLoginOpen && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 relative border border-slate-100">
@@ -474,10 +581,6 @@ export default function App() {
                 />
               </div>
 
-              <div className="text-xs text-emerald-600 text-right cursor-pointer hover:underline">
-                পাসওয়ার্ড ভুলে গেছেন?
-              </div>
-
               <button 
                 type="submit"
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-sm shadow-md"
@@ -493,7 +596,7 @@ export default function App() {
       <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
           <div className="space-y-3">
-            <h3 className="text-white text-lg font-bold">সরকারি মডেল কলেজ</h3>
+            <h3 className="text-white text-lg font-bold">পূবাইল আদর্শ কলেজ</h3>
             <p className="text-xs text-slate-400 leading-relaxed">
               একটি আধুনিক ও স্মার্ট শিক্ষাপ্রতিষ্ঠান। গুণগত শিক্ষা নিশ্চিত করাই আমাদের মূল অঙ্গীকার।
             </p>
@@ -508,13 +611,13 @@ export default function App() {
           </div>
           <div className="space-y-2 text-xs">
             <h4 className="text-white font-semibold mb-3">যোগাযোগ</h4>
-            <p>📍 কলেজ রোড, ঢাকা, বাংলাদেশ</p>
+            <p>📍 পূবাইল, গাজীপুর, বাংলাদেশ</p>
             <p>📞 +৮৮০ ১৭০০-০০০০০০</p>
             <p>✉️ info@college.edu.bd</p>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
-          © ২০২৬ সরকারি মডেল কলেজ। সর্বস্বত্ব সংরক্ষিত।
+          © ২০২৬ পূবাইল আদর্শ কলেজ। সর্বস্বত্ব সংরক্ষিত।
         </div>
       </footer>
     </div>
